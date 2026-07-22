@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { API_BASE_URL, getImageUrl } from '../config/api';
 import './Chatbot.css';
 
 export default function Chatbot() {
@@ -12,9 +13,9 @@ export default function Chatbot() {
   const messagesEndRef = useRef(null);
   const fileInputRef = useRef(null);
 
-  // 1. Fetch Backend Config
+  // 1. Fetch Backend Config dynamically using API_BASE_URL
   useEffect(() => {
-    fetch('/yn/admin/api/chatbot.php?action=config')
+    fetch(`${API_BASE_URL}/chatbot.php?action=config`)
       .then(res => res.json())
       .then(data => {
         if (data.success && data.enabled) {
@@ -25,21 +26,7 @@ export default function Chatbot() {
           ]);
         }
       })
-      .catch(() => {
-        // Fallback relative path check
-        fetch('/admin/api/chatbot.php?action=config')
-          .then(res => res.json())
-          .then(data => {
-            if (data.success && data.enabled) {
-              setEnabled(true);
-              setWelcomeMsg(data.welcome_message);
-              setMessages([
-                { sender: 'bot', text: data.welcome_message }
-              ]);
-            }
-          })
-          .catch(() => {});
-      });
+      .catch(() => {});
   }, []);
 
   useEffect(() => {
@@ -67,7 +54,7 @@ export default function Chatbot() {
       image: img
     };
 
-    fetch('/yn/admin/api/chatbot.php', {
+    fetch(`${API_BASE_URL}/chatbot.php`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
@@ -92,29 +79,11 @@ export default function Chatbot() {
         }
       })
       .catch(() => {
-        // Fallback endpoint URL
-        fetch('/admin/api/chatbot.php', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        })
-          .then(res => res.json())
-          .then(data => {
-            setLoading(false);
-            if (data.success) {
-              setMessages(prev => [
-                ...prev,
-                { sender: 'bot', text: data.reply, products: data.products || [] }
-              ]);
-            }
-          })
-          .catch(() => {
-            setLoading(false);
-            setMessages(prev => [
-              ...prev,
-              { sender: 'bot', text: "Sorry, I am having trouble connecting right now." }
-            ]);
-          });
+        setLoading(false);
+        setMessages(prev => [
+          ...prev,
+          { sender: 'bot', text: "Sorry, I am having trouble connecting right now." }
+        ]);
       });
   };
 
@@ -173,7 +142,7 @@ export default function Chatbot() {
                   <div className="chat-products-scroll">
                     {m.products.map((p) => (
                       <a key={p.id} href={`/product/${p.slug}`} className="chat-product-card">
-                        <img src={p.main_image || 'https://placehold.co/120x150/141414/C8A55C?text=YN'} alt={p.name} className="chat-product-img" />
+                        <img src={getImageUrl(p.main_image) || 'https://placehold.co/120x150/141414/C8A55C?text=YN'} alt={p.name} className="chat-product-img" />
                         <div className="chat-product-title">{p.name}</div>
                         <div className="chat-product-price">₹{Number(p.sale_price || p.price).toLocaleString('en-IN')}</div>
                       </a>
