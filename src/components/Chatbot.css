@@ -128,7 +128,8 @@
 .chat-msg {
     display: flex;
     flex-direction: column;
-    max-width: 85%;
+    max-width: 88%;
+    position: relative;
 }
 
 .chat-msg.bot {
@@ -145,6 +146,12 @@
     font-size: 13px;
     line-height: 1.5;
     word-break: break-word;
+    position: relative;
+    user-select: text !important;
+    -webkit-user-select: text !important;
+    -moz-user-select: text !important;
+    -ms-user-select: text !important;
+    cursor: text;
 }
 
 .chat-msg.bot .chat-msg-bubble {
@@ -159,6 +166,35 @@
     color: #000;
     font-weight: 600;
     border-top-right-radius: 4px;
+}
+
+.chat-copy-btn {
+    align-self: flex-end;
+    background: none;
+    border: none;
+    color: #71717a;
+    font-size: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 3px;
+    padding: 2px 4px;
+    border-radius: 4px;
+    transition: color 0.2s;
+}
+
+.chat-copy-btn:hover {
+    color: #c8a55c;
+}
+
+.chat-msg.user .chat-copy-btn {
+    align-self: flex-end;
+    color: #a1a1aa;
+}
+
+.chat-msg.user .chat-copy-btn:hover {
+    color: #c8a55c;
 }
 
 .chat-msg-img {

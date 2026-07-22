@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { MessageSquare, Bot, Sparkles, Gem, Package, Camera, Send, X, Image as ImageIcon, Loader2 } from 'lucide-react';
+import { MessageSquare, Bot, Sparkles, Gem, Package, Camera, Send, X, Image as ImageIcon, Loader2, Copy, Check } from 'lucide-react';
 import { API_BASE_URL, getImageUrl } from '../config/api';
 import './Chatbot.css';
 
@@ -19,6 +19,7 @@ export default function Chatbot() {
   const [inputVal, setInputVal] = useState('');
   const [imagePreview, setImagePreview] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [copiedIdx, setCopiedIdx] = useState(null);
   const messagesEndRef = useRef(null);
   const fileInputRef = useRef(null);
 
@@ -57,6 +58,12 @@ export default function Chatbot() {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, loading]);
+
+  const copyMessageText = (text, idx) => {
+    navigator.clipboard.writeText(text);
+    setCopiedIdx(idx);
+    setTimeout(() => setCopiedIdx(null), 2000);
+  };
 
   if (!enabled) return null; // Zero visual footprint if disabled in admin panel
 
@@ -125,7 +132,7 @@ export default function Chatbot() {
 
   return (
     <>
-      {/* Floating Trigger Button (Hidden when drawer is open to prevent overlapping text input) */}
+      {/* Floating Trigger Button (Hidden when drawer is open) */}
       {!isOpen && (
         <button className="chatbot-trigger-btn" onClick={toggleOpen} aria-label="Open AI Assistant">
           <MessageSquare size={24} color="#000" />
@@ -162,6 +169,23 @@ export default function Chatbot() {
                   {m.text}
                   {m.image && <img src={m.image} alt="Uploaded outfit" className="chat-msg-img" />}
                 </div>
+
+                {/* Copy Button for both Bot and User messages */}
+                {m.text && (
+                  <button className="chat-copy-btn" onClick={() => copyMessageText(m.text, idx)} title="Copy message text">
+                    {copiedIdx === idx ? (
+                      <>
+                        <Check size={11} color="#2ecc71" />
+                        <span style={{ color: '#2ecc71' }}>Copied</span>
+                      </>
+                    ) : (
+                      <>
+                        <Copy size={11} />
+                        <span>Copy</span>
+                      </>
+                    )}
+                  </button>
+                )}
 
                 {/* Product Recommendations Carousel */}
                 {m.products && m.products.length > 0 && (
