@@ -163,7 +163,9 @@ export default function CartPage() {
   return (
     <div className="cart-page">
       <div className="container">
-        <h1 className="cart-page__title">Your Shopping Bag</h1>
+        {cartItems.length > 0 && (
+          <h1 className="cart-page__title">Your Shopping Bag</h1>
+        )}
         
         {/* Removal Success Toast */}
         <AnimatePresence>
