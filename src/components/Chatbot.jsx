@@ -4,30 +4,57 @@ import './Chatbot.css';
 
 export default function Chatbot() {
   const [enabled, setEnabled] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
-  const [welcomeMsg, setWelcomeMsg] = useState('');
-  const [messages, setMessages] = useState([]);
+  const [isOpen, setIsOpen] = useState(() => {
+    return sessionStorage.getItem('yn_chatbot_open') === 'true';
+  });
+  const [messages, setMessages] = useState(() => {
+    try {
+      const saved = sessionStorage.getItem('yn_chatbot_messages');
+      return saved ? JSON.parse(saved) : [];
+    } catch (e) {
+      return [];
+    }
+  });
   const [inputVal, setInputVal] = useState('');
   const [imagePreview, setImagePreview] = useState(null);
   const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef(null);
   const fileInputRef = useRef(null);
 
-  // 1. Fetch Backend Config dynamically using API_BASE_URL
+  // 1. Fetch Backend Config dynamically
   useEffect(() => {
     fetch(`${API_BASE_URL}/chatbot.php?action=config`)
       .then(res => res.json())
       .then(data => {
         if (data.success && data.enabled) {
           setEnabled(true);
-          setWelcomeMsg(data.welcome_message);
-          setMessages([
-            { sender: 'bot', text: data.welcome_message }
-          ]);
+          // If no messages exist yet, set initial welcome message
+          setMessages(prev => {
+            if (prev.length === 0) {
+              const initial = [{ sender: 'bot', text: data.welcome_message }];
+              sessionStorage.setItem('yn_chatbot_messages', JSON.stringify(initial));
+              return initial;
+            }
+            return prev;
+          });
         }
       })
       .catch(() => {});
   }, []);
+
+  // Save drawer open state to sessionStorage
+  const toggleOpen = () => {
+    const nextState = !isOpen;
+    setIsOpen(nextState);
+    sessionStorage.setItem('yn_chatbot_open', nextState ? 'true' : 'false');
+  };
+
+  // Save messages to sessionStorage on update
+  useEffect(() => {
+    if (messages.length > 0) {
+      sessionStorage.setItem('yn_chatbot_messages', JSON.stringify(messages));
+    }
+  }, [messages]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -43,8 +70,8 @@ export default function Chatbot() {
     if (!text && !img) return;
 
     // Append user message
-    const newMsgs = [...messages, { sender: 'user', text: text, image: img }];
-    setMessages(newMsgs);
+    const updatedMsgs = [...messages, { sender: 'user', text: text, image: img }];
+    setMessages(updatedMsgs);
     setInputVal('');
     setImagePreview(null);
     setLoading(true);
@@ -102,7 +129,7 @@ export default function Chatbot() {
   return (
     <>
       {/* Floating Trigger Button */}
-      <button className="chatbot-trigger-btn" onClick={() => setIsOpen(!isOpen)} aria-label="Open AI Assistant">
+      <button className="chatbot-trigger-btn" onClick={toggleOpen} aria-label="Open AI Assistant">
         <i className={`fa-solid ${isOpen ? 'fa-xmark' : 'fa-headset'}`} style={{ fontSize: '22px' }}></i>
       </button>
 
@@ -123,7 +150,7 @@ export default function Chatbot() {
                 </div>
               </div>
             </div>
-            <button className="chatbot-close-btn" onClick={() => setIsOpen(false)}>
+            <button className="chatbot-close-btn" onClick={toggleOpen}>
               <i className="fa-solid fa-xmark"></i>
             </button>
           </div>
@@ -164,6 +191,9 @@ export default function Chatbot() {
 
           {/* Quick Action Chips */}
           <div className="chatbot-chips">
+            <button className="chat-chip" onClick={() => fileInputRef.current?.click()} style={{ background: 'rgba(200, 165, 92, 0.25)', borderColor: '#c8a55c' }}>
+              📷 Upload Outfit Photo
+            </button>
             <button className="chat-chip" onClick={() => handleSend("Show me designer blouses")}>✨ Designer Blouses</button>
             <button className="chat-chip" onClick={() => handleSend("Recommend heritage jewellery")}>💎 Heritage Jewellery</button>
             <button className="chat-chip" onClick={() => handleSend("Track my order")}>📦 Track Order</button>
@@ -171,25 +201,32 @@ export default function Chatbot() {
 
           {/* Image Preview Bar if image attached */}
           {imagePreview && (
-            <div style={{ background: '#181818', padding: '6px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: '1px solid rgba(200, 165, 92, 0.3)' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px', color: '#c8a55c' }}>
-                <i className="fa-solid fa-image"></i> Image Attached
+            <div style={{ background: '#181818', padding: '8px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: '1px solid rgba(200, 165, 92, 0.4)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px', color: '#c8a55c', fontWeight: '600' }}>
+                <i className="fa-solid fa-image"></i> Outfit Photo Attached
               </div>
-              <button onClick={() => setImagePreview(null)} style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', fontSize: '14px' }}>&times;</button>
+              <button onClick={() => setImagePreview(null)} style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', fontSize: '16px' }}>&times;</button>
             </div>
           )}
 
           {/* Input Bar */}
           <div className="chatbot-input-bar">
+            {/* Hidden File Input */}
             <input type="file" ref={fileInputRef} accept="image/*" style={{ display: 'none' }} onChange={handleImageChange} />
-            <button className="chatbot-icon-btn" onClick={() => fileInputRef.current?.click()} title="Upload Outfit Photo for Visual Matching">
-              <i className="fa-solid fa-camera"></i>
+            
+            <button 
+              className="chatbot-icon-btn" 
+              onClick={() => fileInputRef.current?.click()} 
+              title="Upload Outfit Photo for Visual Matching"
+              style={{ background: 'rgba(200, 165, 92, 0.15)', borderRadius: '50%', width: '34px', height: '34px', border: '1px solid rgba(200, 165, 92, 0.4)' }}
+            >
+              <i className="fa-solid fa-camera" style={{ color: '#c8a55c' }}></i>
             </button>
 
             <input
               type="text"
               className="chatbot-input"
-              placeholder="Ask styling advice or track order..."
+              placeholder={imagePreview ? "Add note (optional) & press send..." : "Ask styling advice or track order..."}
               value={inputVal}
               onChange={(e) => setInputVal(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSend()}
