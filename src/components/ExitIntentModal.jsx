@@ -46,25 +46,24 @@ export default function ExitIntentModal() {
   if (!isOpen) return null;
 
   return (
-    <div className="exit-modal-overlay" onClick={handleDismiss}>
-      <div className="exit-modal-content" onClick={(e) => e.stopPropagation()}>
-        <button className="exit-modal-close" onClick={handleDismiss}>&times;</button>
-        <div className="exit-modal-header">
-          <span className="exit-modal-badge">✨ Exclusive First Order Offer</span>
-          <h2>Claim 10% Off Your Luxury Wardrobe</h2>
-          <p>Handcrafted Designer Blouses &amp; Heritage Jewellery</p>
+    <div className="exit-intent-overlay" onClick={handleDismiss}>
+      <div className="exit-intent-modal" onClick={(e) => e.stopPropagation()}>
+        <button className="exit-intent-close" onClick={handleDismiss}>&times;</button>
+        <span className="exit-intent-badge">✨ Exclusive First Order Offer</span>
+        <h2 className="exit-intent-title">Claim 10% Off Your Luxury Wardrobe</h2>
+        <p className="exit-intent-subtitle">Handcrafted Designer Blouses &amp; Heritage Jewellery</p>
+        <div className="exit-intent-code-box">
+          <span className="exit-intent-code">WELCOME10</span>
+          <button className="exit-intent-copy-btn" onClick={handleCopyCode}>
+            {copied ? 'Copied!' : 'Copy Code'}
+          </button>
         </div>
-        <div className="exit-modal-body">
-          <div className="exit-coupon-box">
-            <span className="coupon-code">WELCOME10</span>
-            <button className="copy-btn" onClick={handleCopyCode}>
-              {copied ? 'Copied!' : 'Copy Code'}
-            </button>
-          </div>
-          <a href="/collections" className="claim-now-btn" onClick={handleDismiss}>
-            Explore Collections &rarr;
-          </a>
-        </div>
+        <a href="/collections" className="exit-intent-cta-btn" onClick={handleDismiss} style={{ display: 'block', textAlign: 'center', textDecoration: 'none' }}>
+          Explore Collections &rarr;
+        </a>
+        <button className="exit-intent-decline" onClick={handleDismiss}>
+          No thanks, I'll pay full price
+        </button>
       </div>
     </div>
   );
