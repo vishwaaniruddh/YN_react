@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { MessageSquare, Bot, Sparkles, Gem, Package, Camera, Send, X, Image as ImageIcon, Loader2 } from 'lucide-react';
 import { API_BASE_URL, getImageUrl } from '../config/api';
 import './Chatbot.css';
 
@@ -130,7 +131,7 @@ export default function Chatbot() {
     <>
       {/* Floating Trigger Button */}
       <button className="chatbot-trigger-btn" onClick={toggleOpen} aria-label="Open AI Assistant">
-        <i className={`fa-solid ${isOpen ? 'fa-xmark' : 'fa-headset'}`} style={{ fontSize: '22px' }}></i>
+        {isOpen ? <X size={24} color="#000" /> : <MessageSquare size={24} color="#000" />}
       </button>
 
       {/* Expandable Chat Drawer */}
@@ -140,7 +141,7 @@ export default function Chatbot() {
           <div className="chatbot-header">
             <div className="chatbot-header-info">
               <div className="chatbot-avatar">
-                <i className="fa-solid fa-gem"></i>
+                <Bot size={20} color="#c8a55c" />
               </div>
               <div>
                 <h4 className="chatbot-title">YosshitaNeha Assistant</h4>
@@ -151,7 +152,7 @@ export default function Chatbot() {
               </div>
             </div>
             <button className="chatbot-close-btn" onClick={toggleOpen}>
-              <i className="fa-solid fa-xmark"></i>
+              <X size={18} />
             </button>
           </div>
 
@@ -181,8 +182,8 @@ export default function Chatbot() {
 
             {loading && (
               <div className="chat-msg bot">
-                <div className="chat-msg-bubble" style={{ color: '#a1a1aa' }}>
-                  <i className="fa-solid fa-spinner fa-spin" style={{ marginRight: '6px' }}></i> AI is thinking...
+                <div className="chat-msg-bubble" style={{ color: '#a1a1aa', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <Loader2 size={16} className="animate-spin" /> AI is thinking...
                 </div>
               </div>
             )}
@@ -191,21 +192,29 @@ export default function Chatbot() {
 
           {/* Quick Action Chips */}
           <div className="chatbot-chips">
-            <button className="chat-chip" onClick={() => fileInputRef.current?.click()} style={{ background: 'rgba(200, 165, 92, 0.25)', borderColor: '#c8a55c' }}>
-              📷 Upload Outfit Photo
+            <button className="chat-chip" onClick={() => fileInputRef.current?.click()} style={{ background: 'rgba(200, 165, 92, 0.25)', borderColor: '#c8a55c', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+              <Camera size={13} /> Upload Outfit Photo
             </button>
-            <button className="chat-chip" onClick={() => handleSend("Show me designer blouses")}>✨ Designer Blouses</button>
-            <button className="chat-chip" onClick={() => handleSend("Recommend heritage jewellery")}>💎 Heritage Jewellery</button>
-            <button className="chat-chip" onClick={() => handleSend("Track my order")}>📦 Track Order</button>
+            <button className="chat-chip" onClick={() => handleSend("Show me designer blouses")} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+              <Sparkles size={13} /> Designer Blouses
+            </button>
+            <button className="chat-chip" onClick={() => handleSend("Recommend heritage jewellery")} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+              <Gem size={13} /> Heritage Jewellery
+            </button>
+            <button className="chat-chip" onClick={() => handleSend("Track my order")} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+              <Package size={13} /> Track Order
+            </button>
           </div>
 
           {/* Image Preview Bar if image attached */}
           {imagePreview && (
             <div style={{ background: '#181818', padding: '8px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: '1px solid rgba(200, 165, 92, 0.4)' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px', color: '#c8a55c', fontWeight: '600' }}>
-                <i className="fa-solid fa-image"></i> Outfit Photo Attached
+                <ImageIcon size={14} /> Outfit Photo Attached
               </div>
-              <button onClick={() => setImagePreview(null)} style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', fontSize: '16px' }}>&times;</button>
+              <button onClick={() => setImagePreview(null)} style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
+                <X size={16} />
+              </button>
             </div>
           )}
 
@@ -220,7 +229,7 @@ export default function Chatbot() {
               title="Upload Outfit Photo for Visual Matching"
               style={{ background: 'rgba(200, 165, 92, 0.15)', borderRadius: '50%', width: '34px', height: '34px', border: '1px solid rgba(200, 165, 92, 0.4)' }}
             >
-              <i className="fa-solid fa-camera" style={{ color: '#c8a55c' }}></i>
+              <Camera size={16} color="#c8a55c" />
             </button>
 
             <input
@@ -233,7 +242,7 @@ export default function Chatbot() {
             />
 
             <button className="chatbot-send-btn" onClick={() => handleSend()}>
-              <i className="fa-solid fa-paper-plane"></i>
+              <Send size={15} color="#000" />
             </button>
           </div>
         </div>
