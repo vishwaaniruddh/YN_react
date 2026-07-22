@@ -7,26 +7,21 @@ export default function PageTracker() {
   const location = useLocation();
 
   useEffect(() => {
-    // Send visitor tracking beacon on every route change
-    const payload = JSON.stringify({
+    // Send visitor tracking payload on every route change
+    const payload = {
       page_url: window.location.href,
       referrer: document.referrer || '',
       user_agent: navigator.userAgent
-    });
+    };
 
     try {
       const endpoint = `${API_BASE_URL}/track_visitor.php`;
-      if (navigator.sendBeacon) {
-        const blob = new Blob([payload], { type: 'application/json' });
-        navigator.sendBeacon(endpoint, blob);
-      } else {
-        fetch(endpoint, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: payload,
-          keepalive: true
-        }).catch(() => {});
-      }
+      fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+        keepalive: true
+      }).catch(() => {});
     } catch (e) {}
   }, [location.pathname, location.search]);
 

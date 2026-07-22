@@ -38,7 +38,7 @@ export default function ExitIntentModal() {
   };
 
   const handleCopyCode = () => {
-    navigator.clipboard.writeText('LUXURY10');
+    navigator.clipboard.writeText('WELCOME10');
     setCopied(true);
     setTimeout(() => setCopied(false), 3000);
   };
@@ -56,7 +56,7 @@ export default function ExitIntentModal() {
         </div>
         <div className="exit-modal-body">
           <div className="exit-coupon-box">
-            <span className="coupon-code">LUXURY10</span>
+            <span className="coupon-code">WELCOME10</span>
             <button className="copy-btn" onClick={handleCopyCode}>
               {copied ? 'Copied!' : 'Copy Code'}
             </button>
