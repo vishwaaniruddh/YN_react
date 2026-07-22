@@ -29,7 +29,6 @@ export default function Chatbot() {
       .then(data => {
         if (data.success && data.enabled) {
           setEnabled(true);
-          // If no messages exist yet, set initial welcome message
           setMessages(prev => {
             if (prev.length === 0) {
               const initial = [{ sender: 'bot', text: data.welcome_message }];
@@ -43,14 +42,12 @@ export default function Chatbot() {
       .catch(() => {});
   }, []);
 
-  // Save drawer open state to sessionStorage
   const toggleOpen = () => {
     const nextState = !isOpen;
     setIsOpen(nextState);
     sessionStorage.setItem('yn_chatbot_open', nextState ? 'true' : 'false');
   };
 
-  // Save messages to sessionStorage on update
   useEffect(() => {
     if (messages.length > 0) {
       sessionStorage.setItem('yn_chatbot_messages', JSON.stringify(messages));
@@ -70,7 +67,6 @@ export default function Chatbot() {
 
     if (!text && !img) return;
 
-    // Append user message
     const updatedMsgs = [...messages, { sender: 'user', text: text, image: img }];
     setMessages(updatedMsgs);
     setInputVal('');
@@ -129,10 +125,12 @@ export default function Chatbot() {
 
   return (
     <>
-      {/* Floating Trigger Button */}
-      <button className="chatbot-trigger-btn" onClick={toggleOpen} aria-label="Open AI Assistant">
-        {isOpen ? <X size={24} color="#000" /> : <MessageSquare size={24} color="#000" />}
-      </button>
+      {/* Floating Trigger Button (Hidden when drawer is open to prevent overlapping text input) */}
+      {!isOpen && (
+        <button className="chatbot-trigger-btn" onClick={toggleOpen} aria-label="Open AI Assistant">
+          <MessageSquare size={24} color="#000" />
+        </button>
+      )}
 
       {/* Expandable Chat Drawer */}
       {isOpen && (
@@ -151,7 +149,7 @@ export default function Chatbot() {
                 </div>
               </div>
             </div>
-            <button className="chatbot-close-btn" onClick={toggleOpen}>
+            <button className="chatbot-close-btn" onClick={toggleOpen} aria-label="Close Chat">
               <X size={18} />
             </button>
           </div>
@@ -227,7 +225,6 @@ export default function Chatbot() {
               className="chatbot-icon-btn" 
               onClick={() => fileInputRef.current?.click()} 
               title="Upload Outfit Photo for Visual Matching"
-              style={{ background: 'rgba(200, 165, 92, 0.15)', borderRadius: '50%', width: '34px', height: '34px', border: '1px solid rgba(200, 165, 92, 0.4)' }}
             >
               <Camera size={16} color="#c8a55c" />
             </button>
@@ -235,13 +232,14 @@ export default function Chatbot() {
             <input
               type="text"
               className="chatbot-input"
+              autoFocus
               placeholder={imagePreview ? "Add note (optional) & press send..." : "Ask styling advice or track order..."}
               value={inputVal}
               onChange={(e) => setInputVal(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSend()}
             />
 
-            <button className="chatbot-send-btn" onClick={() => handleSend()}>
+            <button className="chatbot-send-btn" onClick={() => handleSend()} title="Send Message">
               <Send size={15} color="#000" />
             </button>
           </div>
