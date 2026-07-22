@@ -21,15 +21,16 @@ export const CartProvider = ({ children }) => {
     fetchCart(token);
   }, []);
 
-  const fetchCart = async (token) => {
+  const fetchCart = async (token = sessionToken) => {
+    if (!token) return;
     try {
       const res = await fetch(`${API_BASE_URL}/cart.php`, {
         headers: { 'X-Session-Token': token }
       });
       const data = await res.json();
       if (data.success) {
-        setCartItems(data.data.items);
-        setCartTotal(data.data.total);
+        setCartItems(data.data.items || []);
+        setCartTotal(data.data.total || 0);
       }
     } catch (error) {
       console.error("Failed to fetch cart:", error);
@@ -48,19 +49,20 @@ export const CartProvider = ({ children }) => {
       });
       const data = await res.json();
       if (data.success) {
-        fetchCart(sessionToken); // refresh cart
-        return true;
+        await fetchCart(sessionToken); // refresh cart
+        return { success: true, message: data.message };
       }
-      return false;
+      return { success: false, message: data.message };
     } catch (error) {
       console.error("Failed to add to cart:", error);
-      return false;
+      return { success: false, message: "Network error while adding to cart" };
     }
   };
 
   const updateQuantity = async (productId, quantity) => {
+    if (!productId) return { success: false, message: "Invalid product ID" };
     try {
-      await fetch(`${API_BASE_URL}/cart.php`, {
+      const res = await fetch(`${API_BASE_URL}/cart.php`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -68,19 +70,29 @@ export const CartProvider = ({ children }) => {
         },
         body: JSON.stringify({ product_id: productId, quantity })
       });
-      fetchCart(sessionToken);
+      const data = await res.json();
+      if (data.success) {
+        await fetchCart(sessionToken);
+        return { success: true, message: data.message };
+      } else {
+        return { success: false, message: data.message };
+      }
     } catch (error) {
       console.error("Failed to update cart:", error);
+      return { success: false, message: "Network error while updating cart" };
     }
   };
 
   const removeFromCart = async (productId) => {
+    if (!productId) return;
     try {
-      await fetch(`${API_BASE_URL}/cart.php?product_id=${productId}`, {
+      const res = await fetch(`${API_BASE_URL}/cart.php?product_id=${productId}`, {
         method: 'DELETE',
         headers: { 'X-Session-Token': sessionToken }
       });
-      fetchCart(sessionToken);
+      const data = await res.json();
+      await fetchCart(sessionToken);
+      return data;
     } catch (error) {
       console.error("Failed to remove from cart:", error);
     }
@@ -103,7 +115,7 @@ export const CartProvider = ({ children }) => {
   };
 
   return (
-    <CartContext.Provider value={{ cartItems, cartTotal, addToCart, updateQuantity, removeFromCart, clearCart }}>
+    <CartContext.Provider value={{ cartItems, cartTotal, fetchCart, addToCart, updateQuantity, removeFromCart, clearCart }}>
       {children}
     </CartContext.Provider>
   );

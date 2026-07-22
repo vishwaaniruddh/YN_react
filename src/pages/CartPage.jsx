@@ -14,6 +14,9 @@ export default function CartPage() {
   const { cartItems, cartTotal, updateQuantity, removeFromCart } = useCart();
   const navigate = useNavigate();
 
+  // Stock error notification state
+  const [stockError, setStockError] = useState('');
+
   // Dynamic Shipping Charge state
   const [shippingCharge, setShippingCharge] = useState(0);
   const [isShippingLoading, setIsShippingLoading] = useState(false);
@@ -76,6 +79,27 @@ export default function CartPage() {
     }
   }, [cartTotal]);
 
+  // Quantity Change Handler
+  const handleQuantityChange = async (productId, newQuantity, availableStock) => {
+    setStockError('');
+    if (newQuantity > availableStock) {
+      setStockError(`Only ${availableStock} units available in stock for this item.`);
+      setTimeout(() => setStockError(''), 4000);
+      return;
+    }
+    const result = await updateQuantity(productId, newQuantity);
+    if (result && !result.success) {
+      setStockError(result.message || 'Could not update quantity');
+      setTimeout(() => setStockError(''), 4000);
+    }
+  };
+
+  // Remove Item Handler
+  const handleRemove = async (productId) => {
+    setStockError('');
+    await removeFromCart(productId);
+  };
+
   // Apply Coupon Handler
   const handleApplyCoupon = (e) => {
     e.preventDefault();
@@ -124,6 +148,25 @@ export default function CartPage() {
       <div className="container">
         <h1 className="cart-page__title">Your Shopping Bag</h1>
         
+        {stockError && (
+          <div style={{
+            background: '#ff6b6b22',
+            border: '1px solid #ff6b6b',
+            color: '#ff6b6b',
+            padding: '12px 16px',
+            borderRadius: '8px',
+            marginBottom: '20px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '10px',
+            fontSize: '14px',
+            fontWeight: '600'
+          }}>
+            <AlertCircle size={18} />
+            <span>{stockError}</span>
+          </div>
+        )}
+
         {cartItems.length === 0 ? (
           <div className="cart-page__empty">
             <p>Your cart is currently empty.</p>
@@ -135,13 +178,17 @@ export default function CartPage() {
             <div className="cart-page__items">
               <AnimatePresence>
                 {cartItems.map(item => {
+                  const productId = item.product_id || item.id;
+                  const availableStock = (item.stock_qty !== null && item.stock_qty !== undefined) ? parseInt(item.stock_qty) : 99;
+                  const isMaxStock = item.quantity >= availableStock;
+
                   const effectivePrice = parseFloat(item.sale_price > 0 ? item.sale_price : item.price);
                   const hasDiscount = item.has_discount || (item.original_price && item.original_price > effectivePrice);
                   const originalPrice = parseFloat(item.original_price || item.price);
 
                   return (
                     <motion.div 
-                      key={item.cart_item_id}
+                      key={item.cart_item_id || productId}
                       className="cart-item"
                       initial={{ opacity: 0, height: 0 }}
                       animate={{ opacity: 1, height: 'auto' }}
@@ -180,19 +227,37 @@ export default function CartPage() {
                         <span className="cart-item__sku">SKU: {item.sku}</span>
                         
                         <div className="cart-item__actions">
-                          <div className="cart-item__quantity">
-                            <button onClick={() => updateQuantity(item.product_id, item.quantity - 1)} disabled={item.quantity <= 1}>
-                              <Minus size={14} />
-                            </button>
-                            <span>{item.quantity}</span>
-                            <button onClick={() => updateQuantity(item.product_id, item.quantity + 1)}>
-                              <Plus size={14} />
-                            </button>
+                          <div>
+                            <div className="cart-item__quantity">
+                              <button 
+                                onClick={() => handleQuantityChange(productId, item.quantity - 1, availableStock)} 
+                                disabled={item.quantity <= 1}
+                                title="Decrease Quantity"
+                              >
+                                <Minus size={14} />
+                              </button>
+                              <span>{item.quantity}</span>
+                              <button 
+                                onClick={() => handleQuantityChange(productId, item.quantity + 1, availableStock)} 
+                                disabled={isMaxStock}
+                                title={isMaxStock ? `Max stock available: ${availableStock}` : "Increase Quantity"}
+                                style={{ opacity: isMaxStock ? 0.4 : 1, cursor: isMaxStock ? 'not-allowed' : 'pointer' }}
+                              >
+                                <Plus size={14} />
+                              </button>
+                            </div>
+                            {isMaxStock && (
+                              <span style={{ fontSize: '11px', color: '#c8a55c', marginTop: '4px', display: 'block', fontWeight: '500' }}>
+                                Max stock ({availableStock} available)
+                              </span>
+                            )}
                           </div>
+
                           <button 
                             className="cart-item__remove" 
-                            onClick={() => removeFromCart(item.product_id)}
+                            onClick={() => handleRemove(productId)}
                             aria-label="Remove item"
+                            title="Remove from Cart"
                           >
                             <Trash2 size={16} />
                             <span>Remove</span>
