@@ -26,6 +26,7 @@ import { ThemeProvider } from './context/ThemeContext';
 import ErrorBoundary from './components/ErrorBoundary';
 import ExitIntentModal from './components/ExitIntentModal';
 import Chatbot from './components/Chatbot';
+import PageTracker from './components/PageTracker';
 import './App.css';
 
 function ScrollToTop() {
@@ -52,6 +53,7 @@ export default function App() {
         <WishlistProvider>
         <Router>
           <ScrollToTop />
+          <PageTracker />
           <ExitIntentModal />
           <Chatbot />
           <div className="app">
