@@ -3,6 +3,26 @@ import { MessageSquare, Bot, Sparkles, Gem, Package, Camera, Send, X, Image as I
 import { API_BASE_URL, getImageUrl } from '../config/api';
 import './Chatbot.css';
 
+// Helper to clean and format markdown bold & line breaks nicely without showing raw **
+function formatMessageText(text) {
+  if (!text) return null;
+  const lines = text.split('\n');
+  return lines.map((line, lineIdx) => {
+    const parts = line.split(/(\*\*.*?\*\*)/g);
+    return (
+      <React.Fragment key={lineIdx}>
+        {parts.map((part, partIdx) => {
+          if (part.startsWith('**') && part.endsWith('**') && part.length > 4) {
+            return <strong key={partIdx} style={{ color: '#fff', fontWeight: 700 }}>{part.slice(2, -2)}</strong>;
+          }
+          return part;
+        })}
+        {lineIdx < lines.length - 1 && <br />}
+      </React.Fragment>
+    );
+  });
+}
+
 export default function Chatbot() {
   const [enabled, setEnabled] = useState(false);
   const [isOpen, setIsOpen] = useState(() => {
@@ -166,7 +186,7 @@ export default function Chatbot() {
             {messages.map((m, idx) => (
               <div key={idx} className={`chat-msg ${m.sender}`}>
                 <div className="chat-msg-bubble">
-                  {m.text}
+                  {formatMessageText(m.text)}
                   {m.image && <img src={m.image} alt="Uploaded outfit" className="chat-msg-img" />}
                 </div>
 
