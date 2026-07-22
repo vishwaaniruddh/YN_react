@@ -25,6 +25,7 @@ import { AuthProvider } from './context/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
 import ErrorBoundary from './components/ErrorBoundary';
 import ExitIntentModal from './components/ExitIntentModal';
+import Chatbot from './components/Chatbot';
 import './App.css';
 
 function ScrollToTop() {
@@ -52,6 +53,7 @@ export default function App() {
         <Router>
           <ScrollToTop />
           <ExitIntentModal />
+          <Chatbot />
           <div className="app">
             <Navbar />
             <main className="app__main">
