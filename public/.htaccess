@@ -21,6 +21,11 @@
   RewriteCond %{QUERY_STRING} ^(p|page_id|cat|tag|author|s)= [NC]
   RewriteRule ^ - [R=410,L]
 
+  # Kill Japanese SEO spam hack single-letter query strings
+  # e.g. /?y=518027474, /?m=65204580838, /?w=23413602053
+  RewriteCond %{QUERY_STRING} ^[a-z]=\d+$ [NC]
+  RewriteRule ^$ - [R=410,L]
+
   # -----------------------------------------------
   # STEP 2: Normal React SPA routing (for new site)
   # -----------------------------------------------
