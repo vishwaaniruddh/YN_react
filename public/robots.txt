@@ -1,0 +1,22 @@
+# Robots.txt for YosshitaNeha Fashion Studio (https://yosshitaneha.com)
+User-agent: *
+Allow: /
+Allow: /collections
+Allow: /category/
+Allow: /product/
+Allow: /blogs
+Allow: /blog/
+Allow: /about
+Allow: /contact
+Allow: /shipping-policy
+
+# Block Private & Cart Paths from Search Engines
+Disallow: /admin/
+Disallow: /cart
+Disallow: /checkout
+Disallow: /account
+Disallow: /auth
+
+# XML Sitemap Pointer
+Sitemap: https://yosshitaneha.com/sitemap.xml
+Sitemap: https://yosshitaneha.com/admin/api/sitemap.php
