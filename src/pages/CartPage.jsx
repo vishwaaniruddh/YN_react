@@ -16,6 +16,10 @@ export default function CartPage() {
 
   // Stock error notification state
   const [stockError, setStockError] = useState('');
+  
+  // Item removal confirmation state
+  const [itemToRemove, setItemToRemove] = useState(null);
+  const [removeToast, setRemoveToast] = useState('');
 
   // Dynamic Shipping Charge state
   const [shippingCharge, setShippingCharge] = useState(0);
@@ -94,10 +98,23 @@ export default function CartPage() {
     }
   };
 
-  // Remove Item Handler
-  const handleRemove = async (productId) => {
+  // Open Removal Confirmation Modal
+  const promptRemoveItem = (item) => {
     setStockError('');
-    await removeFromCart(productId);
+    setItemToRemove(item);
+  };
+
+  // Confirm Removal Handler
+  const confirmRemoveItem = async () => {
+    if (!itemToRemove) return;
+    const pId = itemToRemove.product_id || itemToRemove.id;
+    const removedName = itemToRemove.name;
+    setItemToRemove(null);
+    await removeFromCart(pId);
+    
+    // Show toast confirmation
+    setRemoveToast(`"${removedName}" removed from your bag.`);
+    setTimeout(() => setRemoveToast(''), 4000);
   };
 
   // Apply Coupon Handler
@@ -148,6 +165,34 @@ export default function CartPage() {
       <div className="container">
         <h1 className="cart-page__title">Your Shopping Bag</h1>
         
+        {/* Removal Success Toast */}
+        <AnimatePresence>
+          {removeToast && (
+            <motion.div 
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              style={{
+                background: '#10b98122',
+                border: '1px solid #10b981',
+                color: '#10b981',
+                padding: '12px 16px',
+                borderRadius: '8px',
+                marginBottom: '20px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '10px',
+                fontSize: '14px',
+                fontWeight: '600'
+              }}
+            >
+              <CheckCircle2 size={18} />
+              <span>{removeToast}</span>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Stock Error Toast */}
         {stockError && (
           <div style={{
             background: '#ff6b6b22',
@@ -255,7 +300,7 @@ export default function CartPage() {
 
                           <button 
                             className="cart-item__remove" 
-                            onClick={() => handleRemove(productId)}
+                            onClick={() => promptRemoveItem(item)}
                             aria-label="Remove item"
                             title="Remove from Cart"
                           >
@@ -395,6 +440,119 @@ export default function CartPage() {
           </div>
         )}
       </div>
+
+      {/* Remove Item Confirmation Toast / Modal Overlay */}
+      <AnimatePresence>
+        {itemToRemove && (
+          <motion.div 
+            className="remove-modal-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setItemToRemove(null)}
+            style={{
+              position: 'fixed',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: 'rgba(0, 0, 0, 0.82)',
+              backdropFilter: 'blur(8px)',
+              WebkitBackdropFilter: 'blur(8px)',
+              zIndex: 99999,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '20px'
+            }}
+          >
+            <motion.div 
+              className="remove-modal-content"
+              initial={{ scale: 0.9, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.9, opacity: 0, y: 20 }}
+              onClick={(e) => e.stopPropagation()}
+              style={{
+                background: '#121212',
+                border: '1px solid rgba(200, 165, 92, 0.35)',
+                borderRadius: '16px',
+                width: '100%',
+                maxWidth: '420px',
+                padding: '32px 28px',
+                textAlign: 'center',
+                boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.9), 0 0 35px rgba(200, 165, 92, 0.15)',
+                color: '#f5f0e8'
+              }}
+            >
+              <div style={{
+                width: '56px',
+                height: '56px',
+                borderRadius: '50%',
+                background: 'rgba(255, 77, 77, 0.12)',
+                border: '1px solid rgba(255, 77, 77, 0.35)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                margin: '0 auto 20px auto',
+                color: '#ff4d4d'
+              }}>
+                <Trash2 size={26} />
+              </div>
+
+              <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '22px', fontWeight: '500', margin: '0 0 10px 0', color: '#fff' }}>
+                Remove Item from Bag?
+              </h3>
+              
+              <p style={{ fontSize: '14px', color: '#a1a1aa', margin: '0 0 24px 0', lineHeight: 1.5 }}>
+                Are you sure you want to remove <strong style={{ color: '#fff', fontWeight: '600' }}>"{itemToRemove.name}"</strong> from your shopping bag?
+              </p>
+
+              <div style={{ display: 'flex', gap: '12px' }}>
+                <button
+                  onClick={() => setItemToRemove(null)}
+                  style={{
+                    flex: 1,
+                    padding: '13px',
+                    borderRadius: '8px',
+                    border: '1px solid rgba(255,255,255,0.2)',
+                    background: 'rgba(255,255,255,0.05)',
+                    color: '#fff',
+                    fontWeight: '600',
+                    fontSize: '13px',
+                    cursor: 'pointer',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.5px',
+                    transition: 'all 0.2s ease'
+                  }}
+                >
+                  Keep Item
+                </button>
+
+                <button
+                  onClick={confirmRemoveItem}
+                  style={{
+                    flex: 1,
+                    padding: '13px',
+                    borderRadius: '8px',
+                    border: 'none',
+                    background: '#ff4d4d',
+                    color: '#fff',
+                    fontWeight: '700',
+                    fontSize: '13px',
+                    cursor: 'pointer',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.5px',
+                    boxShadow: '0 4px 15px rgba(255,77,77,0.35)',
+                    transition: 'all 0.2s ease'
+                  }}
+                >
+                  Yes, Remove
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
