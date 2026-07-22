@@ -24,6 +24,7 @@ import { WishlistProvider } from './context/WishlistContext';
 import { AuthProvider } from './context/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
 import ErrorBoundary from './components/ErrorBoundary';
+import ExitIntentModal from './components/ExitIntentModal';
 import './App.css';
 
 function ScrollToTop() {
@@ -50,6 +51,7 @@ export default function App() {
         <WishlistProvider>
         <Router>
           <ScrollToTop />
+          <ExitIntentModal />
           <div className="app">
             <Navbar />
             <main className="app__main">
