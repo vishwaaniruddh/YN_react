@@ -1,0 +1,215 @@
+/* src/components/Footer.css */
+
+.footer {
+  background: var(--charcoal);
+  border-top: 1px solid rgba(200, 165, 92, 0.08);
+  padding: 80px 0 0;
+}
+
+.footer__grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr 1fr 1.5fr;
+  gap: 40px;
+  padding-bottom: 60px;
+  border-bottom: 1px solid rgba(245, 240, 232, 0.06);
+}
+
+/* Brand */
+.footer__logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--ivory);
+  margin-bottom: 16px;
+}
+
+.footer__logo svg {
+  color: var(--gold);
+}
+
+.footer__tagline {
+  font-size: 13px;
+  color: var(--muted-text);
+  line-height: 1.7;
+  margin-bottom: 24px;
+  max-width: 280px;
+}
+
+.footer__contact {
+  margin-bottom: 20px;
+}
+
+.footer__contact-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--muted-text);
+  margin-bottom: 8px;
+}
+
+.footer__contact-item svg {
+  color: var(--gold-dark);
+  flex-shrink: 0;
+}
+
+.footer__socials {
+  display: flex;
+  gap: 12px;
+}
+
+.footer__socials a {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid rgba(245, 240, 232, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted-text);
+  transition: all 0.3s;
+}
+
+.footer__socials a:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+  background: rgba(200, 165, 92, 0.08);
+}
+
+/* Link Columns */
+.footer__col-title {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--ivory);
+  margin-bottom: 20px;
+}
+
+.footer__links-col ul li {
+  margin-bottom: 10px;
+}
+
+.footer__links-col ul li a {
+  font-size: 13px;
+  color: var(--muted-text);
+  transition: color 0.3s, padding-left 0.3s;
+}
+
+.footer__links-col ul li a:hover {
+  color: var(--gold);
+  padding-left: 4px;
+}
+
+/* Newsletter */
+.footer__newsletter-desc {
+  font-size: 13px;
+  color: var(--muted-text);
+  line-height: 1.7;
+  margin-bottom: 16px;
+}
+
+.footer__newsletter-form {
+  display: flex;
+  gap: 0;
+}
+
+.footer__newsletter-form input {
+  flex: 1;
+  padding: 10px 14px;
+  background: rgba(245, 240, 232, 0.04);
+  border: 1px solid rgba(245, 240, 232, 0.1);
+  border-right: none;
+  color: var(--ivory);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.footer__newsletter-form input::placeholder {
+  color: var(--muted-text);
+}
+
+.footer__newsletter-form input:focus {
+  border-color: var(--gold);
+}
+
+.footer__newsletter-form button {
+  padding: 10px 20px;
+  background: var(--gold);
+  color: var(--obsidian);
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.footer__newsletter-form button:hover {
+  background: var(--gold-light);
+}
+
+/* Bottom Bar */
+.footer__bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 0;
+}
+
+.footer__bottom p {
+  font-size: 12px;
+  color: var(--muted-text);
+}
+
+.footer__back-to-top {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid rgba(245, 240, 232, 0.1);
+  color: var(--muted-text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+}
+
+.footer__back-to-top:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+  transform: translateY(-2px);
+}
+
+@media (max-width: 1024px) {
+  .footer__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .footer__brand {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 600px) {
+  .footer__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .footer__newsletter-form {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .footer__newsletter-form input {
+    border-right: 1px solid rgba(245, 240, 232, 0.1);
+  }
+}

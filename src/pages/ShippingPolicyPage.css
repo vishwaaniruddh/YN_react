@@ -1,0 +1,85 @@
+/* src/pages/ShippingPolicyPage.css */
+
+.shipping-policy-page {
+  padding-bottom: 80px;
+}
+
+.shipping-policy-page__header {
+  background-color: var(--header-bg);
+  padding: 60px 0;
+  text-align: center;
+  border-bottom: 1px solid var(--border-medium);
+  margin-bottom: 50px;
+}
+
+.shipping-policy-page__icon {
+  color: var(--gold);
+  margin-bottom: 20px;
+}
+
+.shipping-policy-page__header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+  letter-spacing: 2px;
+}
+
+.shipping-policy-page__header p {
+  color: var(--muted-text);
+  font-size: 1.1rem;
+}
+
+.shipping-policy-page__content {
+  max-width: 800px;
+  margin: 0 auto;
+  background-color: var(--card-bg);
+  padding: 40px;
+  border-radius: 8px;
+  border: 1px solid var(--border-subtle);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.shipping-policy-page__intro {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  margin-bottom: 30px;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.shipping-policy-page__list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.shipping-policy-page__list li {
+  position: relative;
+  padding-left: 30px;
+  margin-bottom: 24px;
+  line-height: 1.7;
+  color: var(--muted-text);
+  font-size: 1.05rem;
+}
+
+.shipping-policy-page__list li::before {
+  content: '✦';
+  position: absolute;
+  left: 0;
+  top: 2px;
+  color: var(--gold);
+  font-size: 1.2rem;
+}
+
+@media (max-width: 768px) {
+  .shipping-policy-page__header {
+    padding: 40px 0;
+  }
+  
+  .shipping-policy-page__header h1 {
+    font-size: 2rem;
+  }
+
+  .shipping-policy-page__content {
+    padding: 25px;
+  }
+}

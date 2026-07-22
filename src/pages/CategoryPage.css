@@ -1,0 +1,226 @@
+.category-page {
+  padding-top: 72px; /* Offset for navbar */
+  min-height: 100vh;
+  background-color: var(--deep-bg);
+}
+
+.category-page__loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 50vh;
+  padding-top: 100px;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(200, 165, 92, 0.3);
+  border-radius: 50%;
+  border-top-color: var(--gold);
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.category-page__header {
+  background-color: var(--header-bg);
+  padding: 30px 0;
+  text-align: left;
+  border-bottom: 1px solid var(--border-medium);
+}
+
+.category-page__breadcrumbs {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--muted-text);
+  margin-bottom: 16px;
+}
+
+.category-page__breadcrumbs a {
+  color: var(--muted-text);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.category-page__breadcrumbs a:hover {
+  color: var(--gold);
+}
+
+.category-page__breadcrumbs a:hover {
+  color: var(--gold);
+}
+
+.category-page__breadcrumbs span.current {
+  color: var(--gold);
+}
+
+.category-page__title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.category-page__title-left {
+  flex: 1;
+}
+
+.category-page__title-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding-bottom: 4px;
+}
+
+.category-page__count {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  color: var(--muted-text);
+}
+
+.category-page__sort {
+  background: transparent;
+  border: 1px solid var(--border-medium);
+  color: var(--muted-text);
+  padding: 8px 16px;
+  border-radius: 30px;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  cursor: pointer;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  transition: all 0.3s var(--ease-smooth);
+}
+
+.category-page__sort:hover {
+  border-color: var(--gold);
+  color: var(--ivory);
+}
+
+.category-page__sort option {
+  background: var(--obsidian);
+  color: var(--ivory);
+}
+
+.category-page__title {
+  font-family: var(--font-display);
+  font-size: 36px;
+  font-weight: 300;
+  color: var(--ivory);
+  margin-bottom: 0;
+  letter-spacing: 1px;
+}
+
+.category-page__subtitle {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--gold);
+  letter-spacing: 2px;
+  margin-bottom: 8px;
+}
+
+.category-page__related-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.category-pill {
+  padding: 10px 20px;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--muted-text);
+  border: 1px solid var(--border-medium);
+  border-radius: 30px;
+  background: transparent;
+  text-decoration: none;
+  transition: all 0.3s var(--ease-smooth);
+}
+
+.category-pill:hover,
+.category-pill--active {
+  color: var(--obsidian);
+  background: var(--gold);
+  border-color: var(--gold);
+}
+
+.category-page__content {
+  padding-top: 30px;
+  padding-bottom: 100px;
+}
+
+.category-page__empty,
+.category-page__no-products {
+  text-align: center;
+  padding: 60px 0;
+  color: #8c8f94;
+  font-size: 16px;
+}
+
+.category-page__empty h2 {
+  font-family: var(--font-display);
+  font-size: 32px;
+  color: var(--ivory);
+  margin-bottom: 16px;
+}
+
+.category-page__empty p,
+.category-page__no-products p {
+  margin-bottom: 30px;
+}
+
+.category-page__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+}
+
+.category-page__pagination {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 50px;
+}
+
+@media (max-width: 1024px) {
+  .category-page__grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .category-page__grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  .category-page__title {
+    font-size: 32px;
+  }
+  .category-page__description {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .category-page__grid {
+    grid-template-columns: 1fr;
+  }
+}

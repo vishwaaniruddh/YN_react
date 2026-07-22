@@ -1,0 +1,327 @@
+/* src/components/Navbar.css */
+
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  padding: 0 0;
+  transition: all 0.4s var(--ease-smooth);
+  background: transparent;
+}
+
+.navbar--scrolled {
+  background: var(--navbar-bg);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.navbar__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 72px;
+}
+
+/* Logo */
+.navbar__logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--ivory);
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  transition: color 0.3s;
+}
+
+.navbar__logo svg {
+  color: var(--gold);
+}
+
+.navbar__logo:hover {
+  color: var(--gold);
+}
+
+/* Desktop Links */
+.navbar__links {
+  display: flex;
+  gap: 36px;
+}
+
+.navbar__links a {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--ivory);
+  position: relative;
+  padding: 4px 0;
+  transition: color 0.3s;
+}
+
+.navbar__links a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--gold);
+  transition: width 0.3s var(--ease-smooth);
+}
+
+.navbar__links a:hover {
+  color: var(--gold);
+}
+
+.navbar__links a:hover::after {
+  width: 100%;
+}
+
+/* Action Icons */
+.navbar__actions {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.navbar__actions button {
+  color: var(--ivory);
+  padding: 6px;
+  transition: color 0.3s;
+}
+
+.navbar__actions button:hover {
+  color: var(--gold);
+}
+
+.navbar__cart {
+  position: relative;
+}
+
+.navbar__cart-count {
+  position: absolute;
+  top: -2px;
+  right: -6px;
+  background: var(--gold);
+  color: var(--obsidian);
+  font-size: 9px;
+  font-weight: 700;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.navbar__hamburger {
+  display: none;
+  color: var(--ivory);
+}
+
+/* Mobile Drawer */
+.mobile-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 320px;
+  height: 100vh;
+  background: var(--charcoal);
+  z-index: 999;
+  transform: translateX(100%);
+  transition: transform 0.4s var(--ease-smooth);
+  padding: 100px 40px 40px;
+}
+
+.mobile-drawer--open {
+  transform: translateX(0);
+}
+
+.mobile-drawer__links li {
+  margin-bottom: 8px;
+}
+
+.mobile-drawer__links a {
+  font-family: var(--font-serif);
+  font-size: 28px;
+  font-weight: 400;
+  color: var(--ivory);
+  display: block;
+  padding: 12px 0;
+  transition: color 0.3s;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.mobile-drawer__links a:hover {
+  color: var(--gold);
+  padding-left: 8px;
+}
+
+.mobile-drawer__backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 998;
+  backdrop-filter: blur(2px);
+}
+
+@media (max-width: 768px) {
+  .navbar__links {
+    display: none;
+  }
+
+  .navbar__hamburger {
+    display: block;
+  }
+
+  .navbar__actions button:not(.navbar__hamburger):not(.navbar__cart) {
+    display: none;
+  }
+}
+
+/* Mega Menu Styles */
+.navbar__item-has-dropdown {
+  position: relative; /* Anchor mega menu to nav item or center */
+}
+
+.mega-menu {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: max-content;
+  min-width: 680px;
+  max-width: 820px;
+  background-color: rgba(20, 20, 20, 0.98);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(20px);
+  padding: 26px 36px 30px;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.25s var(--ease-smooth);
+  margin-top: 10px;
+  z-index: 1000;
+}
+
+.mega-menu--active {
+  opacity: 1;
+  visibility: visible;
+  margin-top: 0;
+}
+
+.mega-menu__header {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 22px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.mega-menu__inner {
+  column-count: 3;
+  column-gap: 48px;
+}
+
+.mega-menu__section {
+  break-inside: avoid;
+  margin-bottom: 16px;
+}
+
+.mega-menu__section h4 {
+  margin: 0 0 6px 0;
+}
+
+/* Titles without sub-items: Title case, regular weight */
+.mega-menu__section h4.simple-title a {
+  font-family: var(--font-sans);
+  font-size: 13.5px;
+  font-weight: 400;
+  color: #d4d4d4;
+  text-transform: capitalize;
+  letter-spacing: 0.3px;
+  text-decoration: none;
+  transition: color 0.2s;
+  padding: 0;
+}
+
+.mega-menu__section h4.simple-title a::after {
+  display: none;
+}
+
+.mega-menu__section h4.simple-title a:hover {
+  color: var(--gold);
+}
+
+/* Parent titles WITH sub-items: Bold Title case */
+.mega-menu__section h4.parent-title {
+  margin-top: 4px;
+  margin-bottom: 8px;
+}
+
+.mega-menu__section h4.parent-title a {
+  font-family: var(--font-sans);
+  font-size: 14.5px;
+  font-weight: 700;
+  color: #ffffff;
+  text-transform: capitalize;
+  letter-spacing: 0.3px;
+  text-decoration: none;
+  transition: color 0.2s;
+  padding: 0;
+}
+
+.mega-menu__section h4.parent-title a::after {
+  display: none;
+}
+
+.mega-menu__section h4.parent-title a:hover {
+  color: var(--gold);
+}
+
+/* Sub-items under parents: Title Case, slightly smaller */
+.mega-menu__section ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 10px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.mega-menu__section ul li a {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 400;
+  color: #a0a0a0;
+  text-transform: capitalize;
+  letter-spacing: 0.2px;
+  text-decoration: none;
+  transition: color 0.2s;
+  padding: 0;
+}
+
+.mega-menu__section ul li a::after {
+  display: none;
+}
+
+.mega-menu__section ul li a:hover {
+  color: var(--gold);
+}
+
+@media (max-width: 992px) {
+  .mega-menu {
+    display: none;
+  }
+}

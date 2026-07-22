@@ -1,0 +1,31 @@
+/* src/components/Marquee.css */
+
+.marquee-section {
+  padding: 18px 0;
+  background: var(--charcoal);
+  border-top: 1px solid rgba(200, 165, 92, 0.1);
+  border-bottom: 1px solid rgba(200, 165, 92, 0.1);
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.marquee-track {
+  display: flex;
+  animation: marquee-scroll 30s linear infinite;
+}
+
+.marquee-text {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  color: var(--gold);
+  flex-shrink: 0;
+  padding-right: 0;
+}
+
+@keyframes marquee-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}

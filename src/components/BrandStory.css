@@ -1,0 +1,127 @@
+/* src/components/BrandStory.css — Revamped */
+
+.brand-story {
+  padding: var(--section-pad);
+}
+
+.brand-story__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+.brand-story__title {
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  font-weight: 400;
+  line-height: 1.2;
+  color: var(--ivory);
+  margin-bottom: 4px;
+}
+
+.brand-story__title em {
+  font-style: italic;
+  color: var(--gold);
+}
+
+.brand-story__text-body {
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--muted-text);
+  line-height: 1.9;
+  margin-bottom: 20px;
+}
+
+/* ── Stats Bar ── */
+.brand-story__stats {
+  display: flex;
+  gap: 28px;
+  margin: 28px 0 32px;
+  padding: 20px 0;
+  border-top: 1px solid rgba(200, 165, 92, 0.1);
+  border-bottom: 1px solid rgba(200, 165, 92, 0.1);
+}
+
+.brand-story__stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 4px;
+  flex: 1;
+}
+
+.brand-story__stat-icon {
+  color: var(--gold);
+  margin-bottom: 4px;
+}
+
+.brand-story__stat-value {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--ivory);
+  letter-spacing: 0.5px;
+}
+
+.brand-story__stat-label {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--muted-text);
+}
+
+.brand-story__cta {
+  margin-top: 8px;
+}
+
+.brand-story__image-col {
+  display: flex;
+  justify-content: center;
+}
+
+.brand-story__image-wrapper {
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  max-width: 480px;
+  width: 100%;
+}
+
+.brand-story__image {
+  width: 100%;
+  height: 520px;
+  object-fit: cover;
+  border-radius: 8px;
+  transition: transform 0.6s var(--ease-smooth);
+}
+
+.brand-story__image-wrapper:hover .brand-story__image {
+  transform: scale(1.03);
+}
+
+.brand-story__image-border {
+  position: absolute;
+  inset: -8px;
+  border: 1px solid rgba(200, 165, 92, 0.15);
+  border-radius: 12px;
+  pointer-events: none;
+}
+
+@media (max-width: 768px) {
+  .brand-story__grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .brand-story__stats {
+    gap: 16px;
+  }
+
+  .brand-story__image {
+    height: 360px;
+  }
+}
