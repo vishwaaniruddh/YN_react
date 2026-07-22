@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Minus, Plus, Trash2, ArrowRight, Tag, CheckCircle2, AlertCircle, X } from 'lucide-react';
+import { Minus, Plus, Trash2, ArrowRight, Tag, CheckCircle2, AlertCircle, X, ShoppingBag } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { API_BASE_URL, getImageUrl } from '../config/api';
 import './CartPage.css';
@@ -213,10 +213,91 @@ export default function CartPage() {
         )}
 
         {cartItems.length === 0 ? (
-          <div className="cart-page__empty">
-            <p>Your cart is currently empty.</p>
-            <Link to="/collections" className="button">Continue Shopping</Link>
-          </div>
+          <motion.div 
+            className="cart-page__empty"
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+            style={{
+              padding: '60px 20px',
+              textAlign: 'center',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '18px'
+            }}
+          >
+            <div style={{
+              width: '100px',
+              height: '100px',
+              borderRadius: '50%',
+              background: 'radial-gradient(circle, rgba(200, 165, 92, 0.18) 0%, rgba(200, 165, 92, 0.02) 75%)',
+              border: '1px solid rgba(200, 165, 92, 0.35)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginBottom: '8px',
+              boxShadow: '0 12px 35px rgba(200, 165, 92, 0.12)',
+              position: 'relative'
+            }}>
+              <ShoppingBag size={46} strokeWidth={1.3} style={{ color: 'var(--gold, #c8a55c)' }} />
+              <span style={{
+                position: 'absolute',
+                top: '20px',
+                right: '20px',
+                width: '10px',
+                height: '10px',
+                borderRadius: '50%',
+                background: '#c8a55c',
+                boxShadow: '0 0 10px #c8a55c'
+              }}></span>
+            </div>
+
+            <h2 style={{
+              fontFamily: 'var(--font-display)',
+              fontSize: '24px',
+              fontWeight: '400',
+              color: 'var(--ivory, #fff)',
+              margin: '0',
+              letterSpacing: '1px'
+            }}>
+              Your Shopping Bag is Empty
+            </h2>
+
+            <p style={{
+              fontSize: '14px',
+              color: '#a1a1aa',
+              maxWidth: '440px',
+              lineHeight: '1.6',
+              margin: '0 0 12px 0'
+            }}>
+              Explore our handcrafted designer blouses, regal bridal couture, and heritage jewellery to curate your luxury wardrobe.
+            </p>
+
+            <Link 
+              to="/collections" 
+              className="btn-primary"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '10px',
+                padding: '14px 32px',
+                fontSize: '13px',
+                fontWeight: '600',
+                letterSpacing: '1.5px',
+                textTransform: 'uppercase',
+                textDecoration: 'none',
+                background: 'linear-gradient(135deg, #c8a55c 0%, #a68b4b 100%)',
+                color: '#000',
+                borderRadius: '6px',
+                boxShadow: '0 4px 15px rgba(200, 165, 92, 0.3)'
+              }}
+            >
+              <span>Explore Collections</span>
+              <ArrowRight size={16} />
+            </Link>
+          </motion.div>
         ) : (
           <div className="cart-page__layout">
             
