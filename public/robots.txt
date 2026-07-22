@@ -1,5 +1,28 @@
-# Robots.txt for YosshitaNeha Fashion Studio (https://yosshitaneha.com)
+# robots.txt for YosshitaNeha Fashion Studio (https://yosshitaneha.com)
+# NEW SITE - Clean fresh indexing from scratch
+
 User-agent: *
+
+# -----------------------------------------------
+# BLOCK all old WordPress-style URLs permanently
+# These were indexed from the old WordPress site
+# -----------------------------------------------
+Disallow: /wp-admin/
+Disallow: /wp-content/
+Disallow: /wp-includes/
+Disallow: /wp-login.php
+Disallow: /wordpress/
+Disallow: /dBsaN
+
+# Block Private / Functional Pages from Search Engines
+Disallow: /admin/
+Disallow: /cart
+Disallow: /checkout
+Disallow: /account
+Disallow: /auth
+Disallow: /wishlist
+
+# Allow all new React site pages (fresh indexing)
 Allow: /
 Allow: /collections
 Allow: /category/
@@ -10,13 +33,7 @@ Allow: /about
 Allow: /contact
 Allow: /shipping-policy
 
-# Block Private & Cart Paths from Search Engines
-Disallow: /admin/
-Disallow: /cart
-Disallow: /checkout
-Disallow: /account
-Disallow: /auth
-
-# XML Sitemap Pointer
+# -----------------------------------------------
+# New XML Sitemap (fresh content only)
+# -----------------------------------------------
 Sitemap: https://yosshitaneha.com/sitemap.xml
-Sitemap: https://yosshitaneha.com/admin/api/sitemap.php

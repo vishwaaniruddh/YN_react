@@ -1,9 +1,34 @@
-# Apache React SPA Routing .htaccess
+# Apache React SPA Routing + Old WordPress URL Removal .htaccess
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteBase /
+
+  # -----------------------------------------------
+  # STEP 1: Kill old WordPress-style hash/dBsaN URLs
+  # These are OLD indexed WordPress pages - return 410 GONE
+  # so Google removes them FAST (faster than 404)
+  # -----------------------------------------------
+  RewriteCond %{REQUEST_URI} ^/dBsaN [NC]
+  RewriteRule ^ - [R=410,L]
+
+  RewriteCond %{REQUEST_URI} ^/wp- [NC]
+  RewriteRule ^ - [R=410,L]
+
+  RewriteCond %{REQUEST_URI} ^/wordpress [NC]
+  RewriteRule ^ - [R=410,L]
+
+  # Kill old WordPress ?p=, ?page_id=, ?cat= query params
+  RewriteCond %{QUERY_STRING} ^(p|page_id|cat|tag|author|s)= [NC]
+  RewriteRule ^ - [R=410,L]
+
+  # -----------------------------------------------
+  # STEP 2: Normal React SPA routing (for new site)
+  # -----------------------------------------------
   RewriteRule ^index\.html$ - [L]
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
   RewriteRule . /index.html [L]
 </IfModule>
+
+# 410 GONE error document (no content)
+ErrorDocument 410 " "
