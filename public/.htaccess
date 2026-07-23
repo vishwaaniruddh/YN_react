@@ -4,6 +4,13 @@
   RewriteBase /
 
   # -----------------------------------------------
+  # STEP 0: EXCLUDE ADMIN DIRECTORY & API
+  # Admin panel is internal - NEVER apply 410s or SPA rewrites to /admin
+  # -----------------------------------------------
+  RewriteCond %{REQUEST_URI} ^/admin [NC]
+  RewriteRule ^ - [L]
+
+  # -----------------------------------------------
   # STEP 1: Kill old WordPress-style hash/dBsaN URLs
   # These are OLD indexed WordPress pages - return 410 GONE
   # so Google removes them FAST (faster than 404)
@@ -17,12 +24,13 @@
   RewriteCond %{REQUEST_URI} ^/wordpress [NC]
   RewriteRule ^ - [R=410,L]
 
-  # Kill old WordPress ?p=, ?page_id=, ?cat= query params
-  RewriteCond %{QUERY_STRING} ^(p|page_id|cat|tag|author|s)= [NC]
+  # Kill old WordPress ?p=123, ?page_id=123 query params
+  RewriteCond %{REQUEST_URI} !^/admin [NC]
+  RewriteCond %{QUERY_STRING} ^(p|page_id|cat|tag|author)=\d+ [NC]
   RewriteRule ^ - [R=410,L]
 
-  # Kill Japanese SEO spam hack single-letter query strings
-  # e.g. /?y=518027474, /?m=65204580838, /?w=23413602053
+  # Kill Japanese SEO spam hack single-letter query strings (e.g. /?y=518027474, /?m=65204580838)
+  RewriteCond %{REQUEST_URI} !^/admin [NC]
   RewriteCond %{QUERY_STRING} ^[a-z]=\d+$ [NC]
   RewriteRule ^$ - [R=410,L]
 
